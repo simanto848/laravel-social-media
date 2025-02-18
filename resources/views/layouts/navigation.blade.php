@@ -22,7 +22,7 @@
                         Notifications
                     </x-nav-link>
                     <x-nav-link>
-                        Profile
+                        Find Friends
                     </x-nav-link>
                 </div>
             </div>
@@ -65,11 +65,9 @@
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
 
-                            <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
-                                                this.closest('form').submit();">
+                            <x-primary-button class="ms-3">
                                 {{ __('Log Out') }}
-                            </x-dropdown-link>
+                            </x-primary-button>
                         </form>
                     </x-slot>
                 </x-dropdown>
