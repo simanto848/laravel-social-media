@@ -23,20 +23,18 @@ class FriendController extends Controller
         }
 
         // Check if a request already exists
-        $existingRequest = Friend::where(function($query) use ($authUserId, $userId) {
-            $query->where('user1_id', $authUserId)->where('user2_id', $userId);
-        })->orWhere(function($query) use ($authUserId, $userId) {
-            $query->where('user1_id', $userId)->where('user2_id', $authUserId);
-        })->first();
-
+        $existingRequest = Friend::where(function ($query) use ($authUserId, $userId) {
+            $query->where('user1_id', min($authUserId, $userId))->where('user2_id', max($authUserId, $userId));
+        })->exists();
+        
         if ($existingRequest) {
-            return response()->json(['message' => 'Friend request already exists or you are already friends'], 409);
+            return response()->json(['message' => 'Friend request already exists'], 409);
         }
 
         // Create new friend request
         $friendRequest = Friend::create([
-            'user1_id' => $authUserId,
-            'user2_id' => $userId,
+            'user1_id' => min($authUserId, $userId),
+            'user2_id' => max($authUserId, $userId),
             'status' => 'pending'
         ]);
 
