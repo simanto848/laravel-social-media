@@ -24,3 +24,4 @@ Route::middleware('auth')->prefix('friend')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+require __DIR__ . '/friend.php';
