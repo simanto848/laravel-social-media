@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('friend_id')->constrained('users')->onDelete('cascade')->onUpdate('cascade');
             $table->enum('status', ['pending', 'accepted', 'rejected'])->default('pending');
             $table->timestamps();
-            $table->unique([DB::raw('LEAST(user_id, friend_id)'), DB::raw('GREATEST(user_id, friend_id)')]); # Ensure unique friendship
+            $table->unique(['user_id', 'friend_id']); # Ensure unique friendship
         });
 
         Schema::enableForeignKeyConstraints(); # Enable the FOREIGN KEY Constraints
