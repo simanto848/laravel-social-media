@@ -24,4 +24,10 @@ Route::middleware('auth:sanctum')->prefix('friend')->as('friend')->group(functio
 
     // Get mutual friends
     Route::get('/{friendId}/mutual-friends', [FriendController::class, 'mutualFriends']);
+
+    // Find friends
+    Route::get('/find', [FriendController::class, 'findFriends']);
+
+    // Search friends
+    Route::get('/search', [FriendController::class, 'searchFriends']);
 });

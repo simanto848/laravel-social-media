@@ -65,4 +65,14 @@ class FriendService
         $authUserId = Auth::id();
         return $this->friendRepository->getMutualFriends($authUserId, $friendId);
     }
+
+    public function findFriends($page = 1, $limit = 10){
+        $authUserId = Auth::id();
+        return $this->friendRepository->findFriends($authUserId, $page, $limit);
+    }
+
+    public function searchFriends($search, $page = 1, $limit = 10){
+        $authUserId = Auth::id();
+        return $this->friendRepository->searchFriends($authUserId, $search, $page, $limit);
+    }
 }

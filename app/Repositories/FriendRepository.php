@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Friend;
+use App\Models\User;
 use App\Repositories\Interfaces\FriendRepositoryInterface;
 
 class FriendRepository implements FriendRepositoryInterface {
@@ -73,4 +74,39 @@ class FriendRepository implements FriendRepositoryInterface {
 
         return array_values(array_intersect($userFriends, $friendFriends));
     }
+
+    public function findFriends($userId, $page, $limit) {
+        return User::where('id', '!=', $userId)
+            ->whereNotIn('id', function ($query) use ($userId) {
+                $query->select('friend_id')
+                    ->from('friends')
+                    ->where('user_id', $userId)
+                    ->whereIn('status', ['accepted', 'pending'])
+                    ->union(
+                        $query->select('user_id')
+                            ->from('friends')
+                            ->where('friend_id', $userId)
+                            ->whereIn('status', ['accepted', 'pending'])
+                    );
+            })
+            ->paginate($limit, ['*'], 'page', $page);
+    }
+
+    public function searchFriends($userId, $search, $page, $limit){
+        return User::where('id', '!=', $userId)
+            ->where('name', 'like', "%$search%")
+            ->whereNotIn('id', function ($query) use ($userId) {
+                $query->select('friend_id')
+                    ->from('friends')
+                    ->where('user_id', $userId)
+                    ->whereIn('status', ['accepted', 'pending']);
+            })
+            ->whereNotIn('id', function ($query) use ($userId) {
+                $query->select('user_id')
+                    ->from('friends')
+                    ->where('friend_id', $userId)
+                    ->whereIn('status', ['accepted', 'pending']);
+            })
+            ->paginate($limit, ['*'], 'page', $page);
+    }    
 }

@@ -10,4 +10,6 @@ interface FriendRepositoryInterface {
     public function getFriendRequests($userId, $friendId = null);
     public function getFriends($userId);
     public function getMutualFriends($userId, $friendId);
+    public function findFriends($userId, $page, $limit);
+    public function searchFriends($userId, $search, $page, $limit);
 }

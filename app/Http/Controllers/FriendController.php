@@ -52,4 +52,17 @@ class FriendController extends Controller
     {
         return response()->json(['mutual_friends' => $this->friendService->mutualFriends($friendId)]);
     }
+
+    public function findFriends(Request $request) {
+        $page = $request->page ?? 1;
+        $limit = $request->limit ?? 10;
+        return response()->json(['friends' => $this->friendService->findFriends($page, $limit)]);
+    }
+
+    public function searchFriends(Request $request) {
+        $page = $request->page ?? 1;
+        $limit = $request->limit ?? 10;
+        $search = $request->search;
+        return response()->json(['friends' => $this->friendService->searchFriends($search, $page, $limit)]);
+    }
 }
