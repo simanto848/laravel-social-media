@@ -16,8 +16,9 @@ class FriendController extends Controller
 
     public function sendRequest($friendId)
     {
+        $previousUrl = url()->previous();
         $response = $this->friendService->sendRequest($friendId);
-        return response()->json($response, $response['status'] ? 201 : 400);
+        return redirect($previousUrl)->with('status', $response['status'])->with('message', $response['message']);
     }
 
     public function acceptRequest($friendId)
@@ -56,7 +57,6 @@ class FriendController extends Controller
     public function findFriends(Request $request) {
         $page = $request->page ?? 1;
         $limit = $request->limit ?? 10;
-        // return response()->json(['friends' => $this->friendService->findFriends($page, $limit)]);
         return view('friends.find', ['suggestedFriends' => $this->friendService->findFriends($page, $limit)]);
     }
 
@@ -66,9 +66,4 @@ class FriendController extends Controller
         $search = $request->search;
         return response()->json(['friends' => $this->friendService->searchFriends($search, $page, $limit)]);
     }
-
-    // public function index() {
-    //     $suggestedFriends = $this->friendService->findFriends(1, 10);
-    //     return view('friends.index', compact('suggestedFriends'));
-    // }
 }
