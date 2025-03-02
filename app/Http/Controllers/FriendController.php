@@ -56,7 +56,8 @@ class FriendController extends Controller
     public function findFriends(Request $request) {
         $page = $request->page ?? 1;
         $limit = $request->limit ?? 10;
-        return response()->json(['friends' => $this->friendService->findFriends($page, $limit)]);
+        // return response()->json(['friends' => $this->friendService->findFriends($page, $limit)]);
+        return view('friends.find', ['suggestedFriends' => $this->friendService->findFriends($page, $limit)]);
     }
 
     public function searchFriends(Request $request) {
@@ -65,4 +66,9 @@ class FriendController extends Controller
         $search = $request->search;
         return response()->json(['friends' => $this->friendService->searchFriends($search, $page, $limit)]);
     }
+
+    // public function index() {
+    //     $suggestedFriends = $this->friendService->findFriends(1, 10);
+    //     return view('friends.index', compact('suggestedFriends'));
+    // }
 }

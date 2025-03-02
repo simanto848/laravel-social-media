@@ -21,7 +21,7 @@
                     <x-nav-link>
                         Notifications
                     </x-nav-link>
-                    <x-nav-link>
+                    <x-nav-link :href="route('friend.find')" :active="request()->routeIs('friend.find')">
                         Find Friends
                     </x-nav-link>
                 </div>
