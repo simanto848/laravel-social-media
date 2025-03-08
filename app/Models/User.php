@@ -48,4 +48,12 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => 'hashed',
         ];
     }
+
+    public function primaryProfilePicture() {
+        return $this->hasOne(ProfilePicture::class)->where('is_primary', true);
+    }
+
+    public function profilePictures() {
+        return $this->hasMany(ProfilePicture::class);
+    }
 }

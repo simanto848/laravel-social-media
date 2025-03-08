@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\ProfilePicture;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -45,10 +46,32 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        // Default image path
+        $defaultImagePath = $this->getDefaultImagePath($user->gender);
+
+        // Create a profile picture for the user
+        ProfilePicture::create([
+            'user_id' => $user->id,
+            'url' => $defaultImagePath,
+            'is_primary' => true, // Set as the primary profile picture
+        ]);
+
         event(new Registered($user));
 
         Auth::login($user);
 
         return redirect(route('home', absolute: false));
+
+    }
+    private function getDefaultImagePath(string $gender): string
+    {
+        $basePath = 'images/profile_pictures/';
+
+        return match ($gender) {
+            'male' => $basePath . 'male.png',
+            'female' => $basePath . 'female.png',
+            'other' => $basePath . 'other.png',
+            'default' => $basePath . 'default.png',
+        };
     }
 }
